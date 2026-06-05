@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/feedback_item.dart';
+import 'status_badge.dart';
 import 'type_badge.dart';
 
 class FeedbackCard extends StatelessWidget {
@@ -26,7 +27,7 @@ class FeedbackCard extends StatelessWidget {
                 children: [
                   TypeBadge(type: item.type),
                   const Spacer(),
-                  _StatusChip(status: item.status),
+                  StatusBadge(status: item.status, dense: true),
                 ],
               ),
               const SizedBox(height: 10),
@@ -80,30 +81,5 @@ class FeedbackCard extends StatelessWidget {
     if (diff.inDays < 30) return '${diff.inDays}d ago';
     if (diff.inDays < 365) return '${(diff.inDays / 30).floor()}mo ago';
     return '${(diff.inDays / 365).floor()}y ago';
-  }
-}
-
-class _StatusChip extends StatelessWidget {
-  final String status;
-  const _StatusChip({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    final (color, label) = switch (status) {
-      'reviewed' => (const Color(0xFF533483), 'Reviewed'),
-      'resolved' => (const Color(0xFF2ECC71), 'Resolved'),
-      _ => (const Color(0xFFE94560), 'New'),
-    };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w600),
-      ),
-    );
   }
 }

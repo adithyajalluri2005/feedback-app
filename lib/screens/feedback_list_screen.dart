@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../models/feedback_enums.dart';
 import '../providers/auth_provider.dart';
 import '../providers/feedback_provider.dart';
 import '../widgets/feedback_card.dart';
@@ -8,8 +9,6 @@ import '../widgets/stat_card.dart';
 
 class FeedbackListScreen extends ConsumerWidget {
   const FeedbackListScreen({super.key});
-
-  static const _filters = ['all', 'bug', 'feature', 'general'];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,29 +41,18 @@ class FeedbackListScreen extends ConsumerWidget {
                 child: stats.when(
                   data: (s) => Row(
                     children: [
-                      Expanded(
-                        child: StatCard(
-                          label: 'New',
-                          count: s['new'] ?? 0,
-                          color: const Color(0xFFE94560),
+                      for (var i = 0;
+                          i < FeedbackStatus.values.length;
+                          i++) ...[
+                        if (i > 0) const SizedBox(width: 10),
+                        Expanded(
+                          child: StatCard(
+                            label: FeedbackStatus.values[i].label,
+                            count: s[FeedbackStatus.values[i]] ?? 0,
+                            color: FeedbackStatus.values[i].color,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: StatCard(
-                          label: 'Reviewed',
-                          count: s['reviewed'] ?? 0,
-                          color: const Color(0xFF533483),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: StatCard(
-                          label: 'Resolved',
-                          count: s['resolved'] ?? 0,
-                          color: const Color(0xFF2ECC71),
-                        ),
-                      ),
+                      ],
                     ],
                   ),
                   loading: () => const SizedBox(
@@ -81,13 +69,14 @@ class FeedbackListScreen extends ConsumerWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: _filters.map((f) {
+                    children: <FeedbackType?>[null, ...FeedbackType.values]
+                        .map((f) {
                       final isSelected = selectedFilter == f;
                       return Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: FilterChip(
                           label: Text(
-                            f == 'all' ? 'All' : _capitalize(f),
+                            f?.label ?? 'All',
                             style: TextStyle(
                               color: isSelected ? Colors.white : Colors.white70,
                               fontWeight: isSelected
@@ -152,7 +141,4 @@ class FeedbackListScreen extends ConsumerWidget {
       ),
     );
   }
-
-  String _capitalize(String s) =>
-      s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 }

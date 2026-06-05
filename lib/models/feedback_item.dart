@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'feedback_enums.dart';
 
 class FeedbackItem {
   final String id;
   final String userId;
   final String userEmail;
-  final String type;
+  final FeedbackType type;
   final String message;
   final String platform;
-  final String status;
+  final FeedbackStatus status;
   final DateTime createdAt;
 
   const FeedbackItem({
@@ -27,15 +28,15 @@ class FeedbackItem {
       id: doc.id,
       userId: data['userId'] as String? ?? '',
       userEmail: data['userEmail'] as String? ?? '',
-      type: data['type'] as String? ?? 'general',
+      type: FeedbackType.fromWire(data['type'] as String?),
       message: data['message'] as String? ?? '',
       platform: data['platform'] as String? ?? '',
-      status: data['status'] as String? ?? 'new',
+      status: FeedbackStatus.fromWire(data['status'] as String?),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 
-  FeedbackItem copyWith({String? status}) {
+  FeedbackItem copyWith({FeedbackStatus? status}) {
     return FeedbackItem(
       id: id,
       userId: userId,

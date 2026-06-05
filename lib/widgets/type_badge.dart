@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import '../models/feedback_enums.dart';
 
 class TypeBadge extends StatelessWidget {
-  final String type;
+  final FeedbackType type;
   const TypeBadge({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {
-    final (color, icon, label) = switch (type) {
-      'bug' => (const Color(0xFFE94560), Icons.bug_report_outlined, 'Bug'),
-      'feature' => (const Color(0xFF3498DB), Icons.lightbulb_outline, 'Feature'),
-      _ => (const Color(0xFF95A5A6), Icons.chat_bubble_outline, 'General'),
-    };
+    final color = type.color;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -21,10 +18,10 @@ class TypeBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 13, color: color),
+          Icon(type.icon, size: 13, color: color),
           const SizedBox(width: 4),
           Text(
-            label,
+            type.label,
             style: TextStyle(
                 color: color, fontSize: 11, fontWeight: FontWeight.w600),
           ),

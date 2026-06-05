@@ -37,10 +37,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: 'detail/:id',
-            builder: (context, state) {
-              final item = state.extra as FeedbackItem;
-              return FeedbackDetailScreen(item: item);
-            },
+            builder: (context, state) => FeedbackDetailScreen(
+              id: state.pathParameters['id']!,
+              // Present on the fast path (tapped from the list); null on a
+              // direct deep-link / page refresh, in which case the screen
+              // fetches the document by id.
+              initial: state.extra as FeedbackItem?,
+            ),
           ),
         ],
       ),
