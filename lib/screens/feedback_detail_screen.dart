@@ -98,7 +98,7 @@ class _FeedbackDetailScreenState extends ConsumerState<FeedbackDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Update Status',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w600, fontSize: 14)),
                   const SizedBox(height: 10),
                   _updating
@@ -158,7 +158,7 @@ class _Section extends StatelessWidget {
         children: [
           Text(
             title,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.montserrat(
                 fontWeight: FontWeight.w600, fontSize: 14, color: Colors.white70),
           ),
           const SizedBox(height: 10),

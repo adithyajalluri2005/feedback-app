@@ -26,7 +26,7 @@ class StatCard extends StatelessWidget {
         children: [
           Text(
             count.toString(),
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.montserrat(
               fontSize: 26,
               fontWeight: FontWeight.w700,
               color: color,

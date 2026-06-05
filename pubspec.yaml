@@ -1,5 +1,5 @@
 name: feedback_app
-description: Local Vyapari Feedback Viewer — Admin App
+description: Local Vyapari Admin — Feedback Viewer
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -16,11 +16,38 @@ dependencies:
   go_router: ^14.2.7
   google_fonts: ^6.2.1
   intl: ^0.19.0
+  flutter_native_splash: ^2.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.1
+
+# ── Launcher icon config ────────────────────────────────────────────────────
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo_icon.png"
+  adaptive_icon_background: "#1b3853"
+  adaptive_icon_foreground: "assets/images/logo_adaptive_fg.png"
+  min_sdk_android: 21
+  web:
+    generate: false
+
+# ── Splash screen config ────────────────────────────────────────────────────
+flutter_native_splash:
+  color: "#1b3853"
+  image: assets/images/logo_full_tbg.png
+  color_dark: "#1b3853"
+  image_dark: assets/images/logo_full_tbg.png
+  android_12:
+    image: assets/images/logo_adaptive_fg.png
+    color: "#1b3853"
+    icon_background_color: "#1b3853"
+  web: false
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/

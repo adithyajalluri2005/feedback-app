@@ -1,13 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 import 'router/app_router.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FlutterNativeSplash.remove();
   runApp(const ProviderScope(child: App()));
 }
 
@@ -16,29 +19,29 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // router is created once and never replaced — go_router handles
-    // auth redirects internally via _RouterNotifier's refreshListenable
     final router = ref.read(routerProvider);
     return MaterialApp.router(
       title: 'Local Vyapari Admin',
       debugShowCheckedModeBanner: false,
-      theme: _buildDarkTheme(),
+      theme: _buildTheme(),
       routerConfig: router,
     );
   }
 
-  ThemeData _buildDarkTheme() {
-    const surface = Color(0xFF1A1A2E);
-    const card = Color(0xFF16213E);
-    const accent = Color(0xFF0F3460);
-    const primary = Color(0xFFE94560);
+  ThemeData _buildTheme() {
+    // Brand palette
+    const surface = Color(0xFF0f2234);   // very dark navy (scaffold bg)
+    const card    = Color(0xFF162b3a);   // dark navy (cards)
+    const appBar  = Color(0xFF1b3853);   // brand navy
+    const primary = Color(0xFF628e35);   // brand green
+    const green2  = Color(0xFF7aad42);   // lighter green for hover/focus
 
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: const ColorScheme.dark(
         primary: primary,
-        secondary: Color(0xFF533483),
+        secondary: green2,
         surface: surface,
         surfaceContainerHighest: card,
         onSurface: Colors.white,
@@ -47,16 +50,16 @@ class App extends ConsumerWidget {
       scaffoldBackgroundColor: surface,
       cardColor: card,
       appBarTheme: AppBarTheme(
-        backgroundColor: accent,
+        backgroundColor: appBar,
         foregroundColor: Colors.white,
         elevation: 0,
-        titleTextStyle: GoogleFonts.poppins(
+        titleTextStyle: GoogleFonts.montserrat(
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),
-      textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
+      textTheme: GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: card,
@@ -80,11 +83,12 @@ class App extends ConsumerWidget {
           foregroundColor: Colors.white,
           minimumSize: const Size.fromHeight(48),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15),
+          textStyle: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w600, fontSize: 15),
         ),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: accent,
+        backgroundColor: appBar,
         selectedColor: primary,
         labelStyle: const TextStyle(color: Colors.white70),
         side: BorderSide.none,
