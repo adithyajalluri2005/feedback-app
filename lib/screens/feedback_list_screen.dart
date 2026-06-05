@@ -127,15 +127,51 @@ class FeedbackListScreen extends ConsumerWidget {
                 child: Center(child: CircularProgressIndicator()),
               ),
               error: (e, _) => SliverFillRemaining(
-                child: Center(
-                  child: Text(
-                    'Error: $e',
-                    style: const TextStyle(color: Colors.redAccent),
-                  ),
-                ),
+                child: _FeedbackErrorMessage(error: e),
               ),
             ),
             const SliverPadding(padding: EdgeInsets.only(bottom: 16)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FeedbackErrorMessage extends StatelessWidget {
+  final Object error;
+
+  const _FeedbackErrorMessage({required this.error});
+
+  @override
+  Widget build(BuildContext context) {
+    final message = '$error'.contains('permission-denied')
+        ? 'You are signed in, but this account does not have permission to read feedback.'
+        : 'Could not load feedback.';
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.lock_outline,
+              color: Colors.redAccent,
+              size: 36,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white, fontSize: 15),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '$error',
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white54, fontSize: 12),
+            ),
           ],
         ),
       ),
