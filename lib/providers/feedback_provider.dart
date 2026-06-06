@@ -6,6 +6,9 @@ import '../models/feedback_item.dart';
 /// Currently selected type filter. `null` means "All".
 final selectedFilterProvider = StateProvider<FeedbackType?>((ref) => null);
 
+/// Currently selected app source filter. `null` means "All".
+final selectedSourceFilterProvider = StateProvider<AppSource?>((ref) => null);
+
 final feedbackStreamProvider = StreamProvider<List<FeedbackItem>>((ref) {
   final query = FirebaseFirestore.instance
       .collection('feedback')
@@ -29,12 +32,15 @@ final feedbackByIdProvider =
 });
 
 final filteredFeedbackProvider = Provider<AsyncValue<List<FeedbackItem>>>((ref) {
-  final filter = ref.watch(selectedFilterProvider);
+  final typeFilter = ref.watch(selectedFilterProvider);
+  final sourceFilter = ref.watch(selectedSourceFilterProvider);
   final all = ref.watch(feedbackStreamProvider);
 
   return all.whenData((items) {
-    if (filter == null) return items;
-    return items.where((f) => f.type == filter).toList();
+    var result = items;
+    if (typeFilter != null) result = result.where((f) => f.type == typeFilter).toList();
+    if (sourceFilter != null) result = result.where((f) => f.source == sourceFilter).toList();
+    return result;
   });
 });
 
@@ -43,6 +49,14 @@ final statsProvider = Provider<AsyncValue<Map<FeedbackStatus, int>>>((ref) {
   return all.whenData((items) => {
         for (final status in FeedbackStatus.values)
           status: items.where((f) => f.status == status).length,
+      });
+});
+
+final appSourceStatsProvider = Provider<AsyncValue<Map<AppSource, int>>>((ref) {
+  final all = ref.watch(feedbackStreamProvider);
+  return all.whenData((items) => {
+        AppSource.userApp: items.where((f) => f.source == AppSource.userApp).length,
+        AppSource.vendorApp: items.where((f) => f.source == AppSource.vendorApp).length,
       });
 });
 

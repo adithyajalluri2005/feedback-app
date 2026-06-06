@@ -9,6 +9,7 @@ class FeedbackItem {
   final String message;
   final String platform;
   final FeedbackStatus status;
+  final AppSource source;
   final DateTime createdAt;
 
   const FeedbackItem({
@@ -19,6 +20,7 @@ class FeedbackItem {
     required this.message,
     required this.platform,
     required this.status,
+    required this.source,
     required this.createdAt,
   });
 
@@ -32,6 +34,7 @@ class FeedbackItem {
       message: data['message'] as String? ?? '',
       platform: data['platform'] as String? ?? '',
       status: FeedbackStatus.fromWire(data['status'] as String?),
+      source: AppSource.fromWire(data['source'] as String?),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
@@ -45,6 +48,7 @@ class FeedbackItem {
       message: message,
       platform: platform,
       status: status ?? this.status,
+      source: source,
       createdAt: createdAt,
     );
   }

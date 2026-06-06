@@ -147,38 +147,42 @@ class _DetailBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Update Status',
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w600, fontSize: 14)),
                 const SizedBox(height: 10),
                 updating
                     ? const Center(child: CircularProgressIndicator())
-                    : Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white24),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: DropdownButton<FeedbackStatus>(
-                          value: item.status,
-                          dropdownColor: cardColor,
-                          isExpanded: true,
-                          underline: const SizedBox.shrink(),
-                          icon: const Icon(Icons.arrow_drop_down),
-                          items: [
-                            for (final s in FeedbackStatus.values)
-                              DropdownMenuItem(
-                                value: s,
-                                child: Text(s.label),
-                              ),
-                          ],
-                          onChanged: (v) {
-                            if (v != null && v != item.status) {
-                              onStatusChanged(v);
-                            }
-                          },
-                        ),
-                      ),
+                    : Builder(builder: (context) {
+                        final outline = Theme.of(context).colorScheme.outline;
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: outline.withValues(alpha: 0.4)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: DropdownButton<FeedbackStatus>(
+                            value: item.status,
+                            dropdownColor: cardColor,
+                            isExpanded: true,
+                            underline: const SizedBox.shrink(),
+                            icon: const Icon(Icons.arrow_drop_down),
+                            items: [
+                              for (final s in FeedbackStatus.values)
+                                DropdownMenuItem(
+                                  value: s,
+                                  child: Text(s.label),
+                                ),
+                            ],
+                            onChanged: (v) {
+                              if (v != null && v != item.status) {
+                                onStatusChanged(v);
+                              }
+                            },
+                          ),
+                        );
+                      }),
               ],
             ),
           ),
@@ -200,7 +204,9 @@ class _CenteredMessage extends StatelessWidget {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.white54),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
+          ),
         ),
       ),
     );
@@ -226,8 +232,11 @@ class _Section extends StatelessWidget {
         children: [
           Text(
             title,
-            style: GoogleFonts.montserrat(
-                fontWeight: FontWeight.w600, fontSize: 14, color: Colors.white70),
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
           ),
           const SizedBox(height: 10),
           child,
@@ -250,16 +259,34 @@ class _MetaRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 16, color: Colors.white38),
+          Icon(icon,
+              size: 16,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38)),
           const SizedBox(width: 8),
           SizedBox(
             width: 80,
-            child: Text(label,
-                style: const TextStyle(color: Colors.white38, fontSize: 12)),
+            child: Text(
+              label,
+              style: TextStyle(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.38),
+                fontSize: 12,
+              ),
+            ),
           ),
           Expanded(
-            child: Text(value,
-                style: const TextStyle(fontSize: 13, color: Color(0xDEFFFFFF))),
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 13,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.87),
+              ),
+            ),
           ),
         ],
       ),

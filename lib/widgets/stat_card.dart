@@ -26,7 +26,7 @@ class StatCard extends StatelessWidget {
         children: [
           Text(
             count.toString(),
-            style: GoogleFonts.montserrat(
+            style: GoogleFonts.poppins(
               fontSize: 26,
               fontWeight: FontWeight.w700,
               color: color,
@@ -36,7 +36,10 @@ class StatCard extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-                color: Colors.white54, fontSize: 11, letterSpacing: 0.5),
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
+              fontSize: 11,
+              letterSpacing: 0.5,
+            ),
           ),
         ],
       ),

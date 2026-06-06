@@ -27,27 +27,31 @@ void main() async {
   }
 }
 
+final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.dark);
+
 class App extends ConsumerWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.read(routerProvider);
+    final themeMode = ref.watch(themeModeProvider);
     return MaterialApp.router(
       title: 'Local Vyapari Admin',
       debugShowCheckedModeBanner: false,
-      theme: _buildTheme(),
+      theme: _buildLightTheme(),
+      darkTheme: _buildDarkTheme(),
+      themeMode: themeMode,
       routerConfig: router,
     );
   }
 
-  ThemeData _buildTheme() {
-    // Brand palette
-    const surface = Color(0xFF0f2234);   // very dark navy (scaffold bg)
-    const card    = Color(0xFF162b3a);   // dark navy (cards)
-    const appBar  = Color(0xFF1b3853);   // brand navy
-    const primary = Color(0xFF628e35);   // brand green
-    const green2  = Color(0xFF7aad42);   // lighter green for hover/focus
+  ThemeData _buildDarkTheme() {
+    const surface = Color(0xFF0f2234);
+    const card    = Color(0xFF162b3a);
+    const appBar  = Color(0xFF1b3853);
+    const primary = Color(0xFF628e35);
+    const green2  = Color(0xFF7aad42);
 
     return ThemeData(
       useMaterial3: true,
@@ -66,13 +70,13 @@ class App extends ConsumerWidget {
         backgroundColor: appBar,
         foregroundColor: Colors.white,
         elevation: 0,
-        titleTextStyle: GoogleFonts.montserrat(
+        titleTextStyle: GoogleFonts.poppins(
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),
-      textTheme: GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme),
+      textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: card,
@@ -96,14 +100,80 @@ class App extends ConsumerWidget {
           foregroundColor: Colors.white,
           minimumSize: const Size.fromHeight(48),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          textStyle: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w600, fontSize: 15),
+          textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15),
         ),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: appBar,
         selectedColor: primary,
         labelStyle: const TextStyle(color: Colors.white70),
+        side: BorderSide.none,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      ),
+    );
+  }
+
+  ThemeData _buildLightTheme() {
+    const surface = Color(0xFFF0F4F8);
+    const card    = Color(0xFFFFFFFF);
+    const appBar  = Color(0xFF4a6e27);   // deeper green for light appbar contrast
+    const primary = Color(0xFF628e35);
+    const green2  = Color(0xFF7aad42);
+
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      colorScheme: const ColorScheme.light(
+        primary: primary,
+        secondary: green2,
+        surface: surface,
+        surfaceContainerHighest: card,
+        onSurface: Colors.black87,
+        outline: Colors.black12,
+      ),
+      scaffoldBackgroundColor: surface,
+      cardColor: card,
+      appBarTheme: AppBarTheme(
+        backgroundColor: appBar,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        titleTextStyle: GoogleFonts.poppins(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+      ),
+      textTheme: GoogleFonts.poppinsTextTheme(ThemeData.light().textTheme),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: card,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.black26),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.black26),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: primary),
+        ),
+        labelStyle: const TextStyle(color: Colors.black54),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primary,
+          foregroundColor: Colors.white,
+          minimumSize: const Size.fromHeight(48),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: const Color(0xFFE4EDD9),
+        selectedColor: primary,
+        labelStyle: const TextStyle(color: Colors.black87),
         side: BorderSide.none,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
@@ -122,7 +192,6 @@ class StartupErrorApp extends StatelessWidget {
       title: 'Local Vyapari Admin',
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: const Color(0xFF0f2234),
         body: SafeArea(
           child: Center(
             child: Padding(
@@ -130,27 +199,15 @@ class StartupErrorApp extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.error_outline,
-                    color: Colors.redAccent,
-                    size: 42,
-                  ),
+                  const Icon(Icons.error_outline, color: Colors.redAccent, size: 42),
                   const SizedBox(height: 16),
                   const Text(
                     'App could not start',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    '$error',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white70),
-                  ),
+                  Text('$error', textAlign: TextAlign.center),
                 ],
               ),
             ),

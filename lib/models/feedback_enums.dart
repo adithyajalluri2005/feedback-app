@@ -1,5 +1,25 @@
 import 'package:flutter/material.dart';
 
+/// Which app the feedback was submitted from. Wire values match the `source`
+/// field stored in Firestore (user_app / vendor_app).
+enum AppSource {
+  userApp('user_app', 'User App', Color(0xFF3498DB), Icons.person_outline),
+  vendorApp('vendor_app', 'Vendor App', Color(0xFFE67E22), Icons.store_outlined),
+  unknown('unknown', 'Unknown', Color(0xFF7F8C8D), Icons.device_unknown_outlined);
+
+  const AppSource(this.wire, this.label, this.color, this.icon);
+
+  final String wire;
+  final String label;
+  final Color color;
+  final IconData icon;
+
+  static AppSource fromWire(String? value) => values.firstWhere(
+        (s) => s.wire == value,
+        orElse: () => AppSource.unknown,
+      );
+}
+
 /// Type of feedback a user submitted. Wire values match the `type` field
 /// stored in Firestore (bug / feature / general).
 enum FeedbackType {
